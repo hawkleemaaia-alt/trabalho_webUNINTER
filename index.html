@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfólio | Seu Nome</title>
+  <meta name="description" content="Portfólio pessoal — currículo online." />
+  <link rel="stylesheet" href="styles.css" />
+  <!--
+    Requisitos aatenção:
+    - HTML5 sem frameworks, com 4 seções: Sobre, Formação, Portfólio e Contato
+    - Navegação por âncoras
+    - Menu 
+    - Comentários explicando pontos relevantes
+  -->
+</head>
+<body>
+  <!-- atalho para leitores/teclado -->
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo" id="topo">
+    <nav class="nav" aria-label="principal">
+      <!-- botão do menu (visível) -->
+      <button class="menu-toggle" aria-expanded="false" aria-controls="menuNavegacao" id="botaoMenu">
+        <span class="apenasLeitura">Abrir/fechar menu</span>
+      </button>
+      <ul id="menuNavegacao" class="menu">
+        <li><a href="#sobre">Sobre mim</a></li>
+        <li><a href="#formacao">Formação</a></li>
+        <li><a href="#portfolio">Portfólio</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+      <!-- alterna tema claro/escuro -->
+  <button id="botaoTema" aria-pressed="false" class="tema-toggle" title="Alternar tema claro/escuro"><span class="apenasLeitura">Alternar tema</span></button>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+    <!-- Seção: Sobre mim -->
+    <section id="sobre" class="secao">
+      <h1>Olá, eu sou <span class="realce">Leandro de Almeida Maia</span> </h1>
+      <p>
+        Desenvolvedor iniciante apaixonado por aprender cada vez mais as nuances da programação. 
+        Gosto de tentar aplicar meus conhecimentos em projetos práticos, 
+        mesmo quando não são da área de programação para reforçar meu aprendizado e ajudar a facilitar minha rotina. 
+      </p>
+      <div class="cartoes">
+        <article class="blocoConteudo">
+          <h2>Hobbies</h2>
+          <ul>
+            <li>Códigos e desafios de lógica</li>
+            <li>Jogos de videogame e cultura geek</li>
+            <li>Animes e séries</li>
+            <li>RPGs e jogos de tabuleiro e cartas (TCG, Poker etc.)</li>
+            <li>Leitura e escrita criativa</li>
+            <li>Filosofar sobre a vida e o universo, ou conteúdo lúdico</li>
+          </ul>
+        </article>
+  <article class="blocoConteudo">
+          <h2>Objetivos</h2>
+          <p>Buscar trabalhos de meio período (noturnos) na área de desenvolvimento para aprendizado prático e vivência real de um projeto. 
+            Quero me formar para atuar em start-ups e contribuir para projetos inovadores. 
+            Busco também lecionar programação para iniciantes no futuro, pois além de reforçar meu conhecimento, 
+            quero ajudar outras pessoas a entrarem nesse universo, contribuindo para um país evoluído tecnologicamente.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Seção: Formação -->
+    <section id="formacao" class="secao">
+      <h2>Formação</h2>
+      <ul class="linha-do-tempo">
+        <li>
+          <h3>Curso Superior / Engenharia de Software</h3>
+          <p>Instituição — Centro Universitário Internacional Uninter <time datetime="2025">2025</time> (em andamento)</p>
+          <p>Início do curso — 09/2024</p>
+        </li>
+        <li>
+          <h3>Curso Técnico / Mecânico de Usinagem</h3>
+          <p>Instituição — SENAI, Luíz Varga <time datetime="2012">2012</time> (concluído)</p>
+          <p>Início do curso — 01/2011</p>
+        </li>
+        <li>
+          <h3>Curso de qualificação / Educação Especial em uma abordagem inclusiva</h3>
+          <p>Instituição — SENAI, Luíz Varga <time datetime="2025">2025</time> (concluído)</p>
+          <p>Início do curso — 05/2025</p>
+        </li>
+        <li>
+          <h3>Curso exterior de qualificação / Professional Crisis Management</h3>
+          <p>Instituição — PCMA - Professional Crisis Management Association <time datetime="2025">2025</time> (concluído)</p>
+          <p>Início do curso — 09/2025</p>
+        </li>
+        <li>
+          <h3>Idiomas</h3>
+          <p>Português nativo • Inglês intermediário</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Seção: Portfólio -->
+    <section id="portfolio" class="secao">
+      <h2>Portfólio</h2>
+      <p>Alguns trabalhos/atividades (substitua pelos seus links reais):</p>
+      <div class="grid-projetos">
+        <article class="projeto">
+          <h3>Sistema de Alerta Rural</h3>
+          <p>
+            Projeto completo para monitoramento rural, conectando propriedades a unidades de campo via painel web e APIs. Inclui fluxo de alerta imediato, geolocalização, priorização por proximidade, cadastro de áreas e histórico de ocorrências.<br>
+            <span style="display:block; margin-top:8px; color:var(--secundario); font-size:14px;">Stack: Node.js • Express • PostgreSQL • REST • JWT • Postman</span>
+          </p>
+          <ul style="margin:10px 0 0 0; padding-left:18px; color:var(--texto); font-size:15px;">
+            <li>Botão de pânico para registro de eventos e notificação rápida</li>
+            <li>Geolocalização e despacho por distância/tempo</li>
+            <li>Cadastro de propriedades e histórico de ocorrências</li>
+            <li>Ambientes isolados para segurança e confidencialidade</li>
+            <li>Documentação e testes automatizados</li>
+          </ul>
+          <a class="botao principal" href="projeto-monitoramento.html" target="_blank" rel="noopener">Ver projeto completo</a>
+        </article>
+  <article class="projeto">
+          <h3>Censo Diário de Alunos</h3>
+          <p>
+            Sistema web para registro e acompanhamento da frequência diária dos alunos, otimizando o controle de presença nas instituições de ensino. Permite cadastro simplificado, visualização em tempo real e relatórios periódicos.<br>
+            <span style="display:block; margin-top:8px; color:var(--secundario); font-size:14px;">Stack: HTML5 • CSS3 • JavaScript • LocalStorage • Charts.js</span>
+          </p>
+          <ul style="margin:10px 0 0 0; padding-left:18px; color:var(--texto); font-size:15px;">
+            <li>Interface intuitiva para registro de presenças</li>
+            <li>Visualização em tempo real das estatísticas</li>
+            <li>Relatórios diários e mensais automatizados</li>
+            <li>Persistência local dos dados via LocalStorage</li>
+            <li>Design responsivo para acesso mobile</li>
+          </ul>
+          <a class="botao principal" href="censo_diario_alunos.html" target="_blank" rel="noopener">Ver projeto completo</a>
+        </article>
+  <article class="projeto">
+          <h3>Brinquedo Pedagógico Adaptável</h3>
+          <p>Caixa de ovo + botões de EVA para parear cores. Simples, portátil e adaptável.</p>
+          <a class="botao botaoVerDetalhesProjeto3" href="#" aria-haspopup="dialog">Ver detalhes</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Seção: Contato -->
+    <section id="contato" class="secao">
+      <h2>Contato</h2>
+      <p>Fale comigo preenchendo o formulário abaixo.</p>
+
+      <!--
+        Requisitos JS:
+        - Validação dos campos (nome, email, mensagem)
+        - Validação de formato de e‑mail
+        - "Envio" simulado: exibir mensagem e limpar campos
+      -->
+      <form id="formularioContato" class="form">
+        <div class="grupo">
+          <label for="campoNome">Nome</label>
+          <input type="text" id="campoNome" name="campoNome" required />
+        </div>
+        <div class="grupo">
+          <label for="campoEmail">E-mail</label>
+          <input type="email" id="campoEmail" name="campoEmail" required />
+        </div>
+        <div class="grupo">
+          <label for="campoMensagem">Mensagem</label>
+          <textarea id="campoMensagem" name="campoMensagem" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="botao">Enviar</button>
+        <p id="retornoContato" class="retornoContato" role="status" aria-live="polite" hidden></p>
+      </form>
+    </section>
+  </main>
+
+  <aside class="gavetaProjeto" aria-hidden="true">
+    <div class="gavetaBackdrop" aria-hidden="true"></div>
+    <div class="gavetaConteudo" role="dialog" aria-labelledby="gavetaTitulo">
+      <h3 id="gavetaTitulo">Resumo do projeto</h3>
+      <p>Sistema de pareamento de cores usando caixa de ovo como matriz, botões de EVA coloridos e folha quadriculada. Serve para introduzir cores e pode evoluir para formas/texturas/contas rápidas.</p>
+      <figure>
+        <img src="jogo_pedagogico.jpg" alt="Caixa de ovo com botões de EVA coloridos organizados para pareamento.">
+      </figure>
+      <button class="botao gavetaFechar" aria-label="Fechar">Fechar</button>
+    </div>
+  </aside>
+
+  <footer class="rodape">
+    <p>&copy; <span id="ano"></span> Seu Nome — Portfólio</p>
+    <a href="#topo" class="voltar">Voltar ao topo</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

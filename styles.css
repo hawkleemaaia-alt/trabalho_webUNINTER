@@ -1,0 +1,264 @@
+/* 
+  CSS3 puro (sem frameworks). 
+  Implementa tema claro/escuro usando variáveis CSS e uma classe .escuro no <html>.
+*/
+:root{
+  --fundo: #f7f7f9;
+  --texto: #1f2328;
+  --secundario:#6b7280;
+  --realce:#2563eb;
+  --cartao:#ffffff;
+  --borda:#e5e7eb;
+  --botao:#1f2937;
+  --botao-texto:#fff;
+  
+  /* Novas variáveis de interação */
+  --bordaInteracao: rgba(31, 35, 40, 0.12);
+  --sombraLeve: 0 6px 20px rgba(0, 0, 0, 0.06);
+  --outlineFoco: var(--realce);
+  --transicaoPadrao: 200ms ease-out;
+}
+html.escuro{
+  --fundo:#0b0f14;
+  --texto:#e5e7eb;
+  --secundario:#94a3b8;
+  --realce:#60a5fa;
+  --cartao:#0f1620;
+  --borda:#1f2937;
+  --botao:#e5e7eb;
+  --botao-texto:#0b0f14;
+  
+  /* Ajuste das variáveis de interação para tema escuro */
+  --bordaInteracao: rgba(229, 231, 235, 0.12);
+  --sombraLeve: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji', 'Segoe UI Symbol';
+  background:var(--fundo);
+  color:var(--texto);
+  line-height:1.6;
+}
+a{color:var(--realce); text-decoration:none}
+a:hover{text-decoration:underline}
+.skip{position:absolute; left:-9999px; top:auto}
+.skip:focus{left:1rem; top:1rem; background:var(--cartao); padding:.5rem .75rem; border:1px solid var(--borda); border-radius:.5rem}
+
+.topo{
+  position:sticky; top:0; z-index:10;
+  background:var(--cartao);
+  border-bottom:1px solid var(--borda);
+}
+.nav{
+  max-width:1100px; margin:0 auto; padding:.75rem 1rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.menu{display:flex; list-style:none; gap:1rem; margin:0; padding:0}
+.menu a{
+  display:block;
+  padding:.5rem .75rem;
+  border-radius:.5rem;
+  border: 1px solid transparent;
+  transition: transform var(--transicaoPadrao),
+              background-color var(--transicaoPadrao),
+              border-color var(--transicaoPadrao),
+              font-size var(--transicaoPadrao);
+}
+
+.menu a:hover,
+.menu a:focus-visible {
+  transform: scale(1.03);
+  background: var(--borda);
+  border-color: currentColor;
+  text-decoration: none;
+  font-size: 102%;
+}
+
+.menu a:active {
+  transform: translateY(1px);
+}
+
+.menu-toggle{display:none; background:none; border:1px solid var(--borda); padding:.5rem .75rem; border-radius:.5rem; color:var(--texto)}
+.tema-toggle{margin-left:auto; border:1px solid var(--borda); background:var(--cartao); padding:.5rem .75rem; border-radius:.5rem}
+
+.secao{max-width:1100px; margin:2.5rem auto; padding:0 1rem}
+h1,h2,h3{line-height:1.25}
+.realce{color:var(--realce)}
+
+.cartoes{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.blocoConteudo{background:var(--cartao); border:1px solid var(--borda); border-radius:12px; padding:1rem}
+
+.linha-do-tempo{list-style:none; padding:0; margin:0}
+.linha-do-tempo li{border-left:3px solid var(--realce); padding:.5rem 1rem; margin:1rem 0; background:var(--cartao); border-radius:8px; border:1px solid var(--borda)}
+
+.grid-projetos {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.projeto {
+  background: var(--cartao);
+  border: 1px solid var(--bordaInteracao);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--sombraLeve);
+  transition: transform var(--transicaoPadrao),
+              border-color var(--transicaoPadrao),
+              box-shadow var(--transicaoPadrao);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+
+.projeto:hover,
+.projeto:focus-within,
+.projeto.ativo {
+  transform: scale(1.02);
+  border-color: var(--borda);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+
+.projeto:active {
+  transform: translateY(1px) scale(1.01);
+  box-shadow: var(--sombraLeve);
+}
+
+.projeto .botao {
+  margin-top: auto;
+  align-self: center;
+  padding: 0.75rem 1.25rem;
+}
+
+/* Gaveta lateral */
+.gavetaProjeto {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(480px, 90vw);
+  transform: translateX(100%);
+  transition: transform 260ms ease-out;
+  background: var(--cartao);
+  box-shadow: -12px 0 36px rgba(0, 0, 0, 0.18);
+  z-index: 1000;
+}
+
+.gavetaProjeto.aberta {
+  transform: translateX(0);
+}
+
+.gavetaBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms;
+  z-index: 999;
+}
+
+.gavetaBackdrop.visivel {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gavetaConteudo {
+  padding: 1.5rem;
+  height: 100%;
+  display: grid;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.gavetaConteudo figure {
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.gavetaConteudo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gavetaFechar {
+  justify-self: start;
+}
+
+.botao{
+  display:inline-block;
+  background:var(--botao);
+  color:var(--botao-texto);
+  padding:.5rem .9rem;
+  border-radius:.5rem;
+  border: 1px solid transparent;
+  transition: transform var(--transicaoPadrao),
+              background-color var(--transicaoPadrao),
+              border-color var(--transicaoPadrao),
+              box-shadow var(--transicaoPadrao);
+}
+
+.botao:hover,
+.botao:focus-visible {
+  transform: scale(1.03);
+  text-decoration: none;
+  border-color: currentColor;
+}
+
+.botao:active {
+  transform: translateY(1px);
+}
+
+/* Estilo para links visitados */
+.projeto a:visited {
+  text-decoration: underline dotted;
+  opacity: 0.96;
+}
+
+.form{max-width:640px}
+.grupo{display:flex; flex-direction:column; gap:.35rem; margin-bottom:1rem}
+.retornoContato{margin-top:.75rem; color:var(--realce)}
+input, textarea{border:1px solid var(--borda); background:var(--cartao); color:var(--texto); border-radius:.5rem; padding:.6rem .7rem}
+
+.rodape{border-top:1px solid var(--borda); padding:2rem 1rem; text-align:center; color:var(--secundario)}
+.voltar{display:inline-block; margin-top:.5rem}
+
+/* Estilos de foco acessível */
+:focus-visible {
+  outline: 3px solid var(--outlineFoco);
+  outline-offset: 3px;
+}
+
+/* Suporte a prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Responsivo: menu hamburguer e gaveta */
+@media (max-width: 720px) {
+  .menu-toggle{display:inline-block}
+  .menu{display:none; flex-direction:column; gap:0}
+  .menu.ativo{display:flex}
+  .menu a{padding:.75rem 0}
+
+  /* Gaveta mobile */
+  .gavetaProjeto {
+    width: 100%;
+    height: 80vh;
+    inset: auto 0 0 0;
+    transform: translateY(100%);
+  }
+  
+  .gavetaProjeto.aberta {
+    transform: translateY(0);
+  }
+}

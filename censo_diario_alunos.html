@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+  Projeto desenvolvido alguns meses atrás para auxiliar no meu trabalho,
+  automatizando o controle diário da frequência dos alunos e facilitando
+  a visualização dos dados e geração de relatórios.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Turmas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6fa;
+      color: #222;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #1e3a8a;
+      color: white;
+    }
+
+    input[type="number"] {
+      width: 80px;
+      padding: 5px;
+      text-align: center;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    .soma {
+      font-weight: bold;
+      background-color: #eef;
+    }
+
+    .total-geral {
+      background-color: #dceefc;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+
+    .botoes {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #1ebe5d;
+    }
+
+    .whatsapp-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (max-width: 768px) {
+      th, td {
+        font-size: 14px;
+        padding: 6px;
+      }
+
+      input[type="number"] {
+        width: 60px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Turmas - Educação Infantil e Fundamental</h1>
+
+    <table id="tabela-turmas">
+      <thead>
+        <tr>
+          <th>Etapa / Ano</th>
+          <th>Professor(a) 1</th>
+          <th>Professor(a) 2</th>
+          <th>Professor(a) 3</th>
+          <th>Total da Etapa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Etapa 1</td>
+          <td><input type="number" placeholder="Professor(a) A" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) B" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) C" min="0" onchange="calcularTotais()"></td>
+          <td class="soma" id="etapa1-total">0</td>
+        </tr>
+        <tr>
+          <td>Etapa 2</td>
+          <td><input type="number" placeholder="Professor(a) D" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) E" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) F" min="0" onchange="calcularTotais()"></td>
+          <td class="soma" id="etapa2-total">0</td>
+        </tr>
+        <tr>
+          <td>1º Ano</td>
+          <td><input type="number" placeholder="Professor(a) G" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) H" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) I" min="0" onchange="calcularTotais()"></td>
+          <td class="soma" id="ano1-total">0</td>
+        </tr>
+        <tr>
+          <td>2º Ano</td>
+          <td><input type="number" placeholder="Professor(a) J" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) K" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) L" min="0" onchange="calcularTotais()"></td>
+          <td class="soma" id="ano2-total">0</td>
+        </tr>
+        <tr>
+          <td>3º Ano</td>
+          <td><input type="number" placeholder="Professor(a) M" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) N" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) O" min="0" onchange="calcularTotais()"></td>
+          <td class="soma" id="ano3-total">0</td>
+        </tr>
+        <tr>
+          <td>4º Ano</td>
+          <td><input type="number" placeholder="Professor(a) P" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) Q" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) R" min="0" onchange="calcularTotais()"></td>
+          <td class="soma" id="ano4-total">0</td>
+        </tr>
+        <tr>
+          <td>5º Ano</td>
+          <td><input type="number" placeholder="Professor(a) S" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) T" min="0" onchange="calcularTotais()"></td>
+          <td><input type="number" placeholder="Professor(a) U" min="0" onchange="calcularTotais()"></td>
+          <td class="soma" id="ano5-total">0</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4" style="text-align:right; font-weight:bold;">Total Geral:</td>
+          <td class="total-geral" id="total-geral">0</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="botoes">
+      <button onclick="enviarWhatsapp('coordenacao')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="whatsapp-icon"> Enviar para Coordenação
+      </button>
+      <button onclick="enviarWhatsapp('cozinha')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="whatsapp-icon"> Enviar para Cozinha
+      </button>
+      <button onclick="enviarWhatsapp('direcao')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="whatsapp-icon"> Enviar para Direção
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function calcularTotais() {
+      const linhas = document.querySelectorAll('#tabela-turmas tbody tr');
+      let totalGeral = 0;
+
+      linhas.forEach(linha => {
+        const inputs = linha.querySelectorAll('input[type="number"]');
+        let somaLinha = 0;
+        inputs.forEach(input => {
+          somaLinha += Number(input.value) || 0;
+        });
+        linha.querySelector('.soma').textContent = somaLinha;
+        totalGeral += somaLinha;
+      });
+
+      document.getElementById('total-geral').textContent = totalGeral;
+    }
+
+    function enviarWhatsapp(destino) {
+      calcularTotais(); // Atualiza antes de enviar
+      let mensagem = '';
+      const linhas = document.querySelectorAll('#tabela-turmas tbody tr');
+
+      if (destino === 'coordenacao') {
+        mensagem = '📋 *Censo de Turmas*\n\n';
+        linhas.forEach(linha => {
+          const etapa = linha.cells[0].textContent;
+          const valores = [...linha.querySelectorAll('input')].map(i => i.value || 0);
+          const total = linha.querySelector('.soma').textContent;
+          mensagem += `${etapa}: ${valores.join(' | ')} → Total: ${total}\n`;
+        });
+        mensagem += `\nTotal Geral: ${document.getElementById('total-geral').textContent}`;
+      }
+
+      if (destino === 'cozinha') {
+        const total = document.getElementById('total-geral').textContent;
+        mensagem = `🍽️ Censo do dia: ${total} alunos.`;
+      }
+
+      if (destino === 'direcao') {
+        const total = document.getElementById('total-geral').textContent;
+        mensagem = `📊 Total de alunos na escola: ${total}.`;
+      }
+
+      const textoCodificado = encodeURIComponent(mensagem);
+      const link = `https://wa.me/?text=${textoCodificado}`;
+      window.open(link, '_blank');
+    }
+  </script>
+</body>
+</html>

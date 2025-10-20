@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case Técnico — Sistema de Alerta Rural</title>
+  <meta name="description" content="Case técnico de back-end e APIs para operação de monitoramento rural com acionamento por botão de pânico, geolocalização e isolamento de ambientes." />
+
+  <!--
+  preload de imagens usadas como fundo nos cards (hover) p prevenir e carregar rapido
+  -->
+    <link rel="preload" as="image" href="contexto.jpg">
+    <link rel="preload" as="image" href="tecnologias.jpg">
+    <link rel="preload" as="image" href="contribuicoes.jpg">
+    <link rel="preload" as="image" href="resultados.jpg">
+
+  <style>
+    /* =================== VARIÁVEIS DE TEMA =================== */
+    :root{
+      /* Cores de fundo/texto base (modo escuro) */
+      --fundo: #0b0f14;            /* fundo geral "tático" */
+      --fundo_cartao: #0f1720;     /* cartões escuros */
+      --texto: #e8eef6;            /* texto principal */
+      --texto_suave: #9fb1c4;      /* texto secundário */
+      --linha: #233142;            /* linhas divisórias */
+
+      /* Paleta temática (polícia/alerta + rural) */
+      --azul_policial: #1e3a8a;    /* azul profundo */
+      --azul_interface: #0ea5e9;   /* azul mais claro */
+      --vermelho_alerta: #ef4444;  /* alerta */
+      --verde_rural: #16a34a;      /* referência rural */
+      --dourado_enfase: #f59e0b;   /* ênfase opcional */
+
+      --botao_principal: #1e3a8a;  /* cor de botão principal */
+      --botao_principal_texto: #ffffff;
+
+      --raio_borda: 14px;
+      --sombra_profunda: 0 10px 28px rgba(0,0,0,.35);
+
+      /* grade de fundo sutil para o cabeçalho */
+      --grade: linear-gradient(transparent 23px, rgba(255,255,255,.04) 24px),
+               linear-gradient(90deg, transparent 23px, rgba(255,255,255,.04) 24px);
+    }
+
+    /* Tema claro alternativo */
+    [data-tema="claro"]{
+      --fundo:#f5f7fb;
+      --fundo_cartao:#ffffff;
+      --texto:#0d1321;
+      --texto_suave:#51606f;
+      --linha:#e6ebf2;
+      --botao_principal:#0f172a;
+      --botao_principal_texto:#ffffff;
+      --sombra_profunda:0 8px 24px rgba(3,7,18,.08);
+      --grade: linear-gradient(transparent 23px, rgba(0,0,0,.03) 24px),
+               linear-gradient(90deg, transparent 23px, rgba(0,0,0,.03) 24px);
+    }
+
+    /* =================== REGRAS GERAIS =================== */
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      line-height:1.6;
+    }
+
+    a{ color: inherit; }
+
+    /* =================== CABEÇALHO =================== */
+    .cabecalho{
+      position:relative;
+      padding:64px 20px 48px;
+      background:
+        radial-gradient(1200px 400px at 70% 0%, rgba(14,165,233,.12), transparent 60%),
+        radial-gradient(900px 300px at 20% 0%, rgba(239,68,68,.10), transparent 65%),
+        var(--grade);
+      background-size:100% 24px, 24px 100%;
+    }
+
+    .largura_maxima{ max-width:1040px; margin:0 auto; padding:0 16px; }
+
+    .titulo_principal{
+      font-size: clamp(28px, 4vw, 44px);
+      margin:0 0 8px;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+    }
+    .subtitulo_principal{
+      margin:0;
+      color: var(--texto_suave);
+      font-size:clamp(14px,1.8vw,18px);
+    }
+
+
+    /* Faixas coloridas na base do cabeçalho (alusão visual a operação) */
+    .faixas_base{ position:absolute; inset:auto 0 0 0; height:8px; display:flex; overflow:hidden; border-top:1px solid rgba(255,255,255,.06); }
+    .faixa_azul{ flex:2; background:linear-gradient(90deg,#0b3a7a,var(--azul_interface)); }
+    .faixa_vermelha{ flex:1; background:linear-gradient(90deg,#7a0b0b,var(--vermelho_alerta)); }
+    .faixa_verde{ flex:1; background:linear-gradient(90deg,#0a3a14,var(--verde_rural)); }
+
+    /* =================== AÇÕES NO CABEÇALHO =================== */
+
+    .area_acoes{ display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+
+    .botao{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:12px 16px; border-radius:12px; border:1px solid var(--linha);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.08));
+      color:var(--texto); text-decoration:none; font-weight:600; box-shadow:var(--sombra_profunda);
+      transition:transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+    .botao:hover{ transform:translateY(-2px); border-color:rgba(14,165,233,.5); }
+
+    .botao_principal{
+      background:linear-gradient(180deg, var(--botao_principal), #0b1f4a);
+      color:var(--botao_principal_texto);
+      border-color:transparent;
+    }
+    .botao_principal:hover{ box-shadow:0 14px 36px rgba(14,58,138,.35); }
+
+    .selo_pilha{
+      display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px;
+      background:rgba(14,165,233,.08); border:1px solid rgba(14,165,233,.22); color:var(--texto); font-size:12px; font-weight:600;
+    }
+
+    /* =================== SEÇÕES E CARTÕES =================== */
+    .secao{ padding:28px 0; }
+
+    .cartao{
+      background: var(--fundo_cartao);
+      border:1px solid var(--linha);
+      border-radius: var(--raio_borda);
+      box-shadow: var(--sombra_profunda);
+      padding:22px;
+      transition:border-color .15s ease, transform .15s ease;
+      /* ajustes para imagem de fundo ocupar todo o card */
+      position: relative;
+      overflow: hidden;
+    }
+    .cartao:hover{ border-color:rgba(14,165,233,.45); transform:translateY(-2px); }
+
+    h2{ margin:0 0 10px; font-size:22px; color: var(--texto); }
+    p{ margin:8px 0 0; color:var(--texto); }
+    .texto_suave{ color:var(--texto_suave); }
+    .divisor{ height:1px; background:var(--linha); margin:20px 0; }
+
+    /* grade de duas colunas no desktop */
+    .grade_duas_colunas{ display:grid; gap:18px; }
+    @media(min-width:880px){ .grade_duas_colunas{ grid-template-columns:1.2fr .8fr; } }
+
+    /* =================== LISTA DE DESTAQUES (CONTEXTO) =================== */
+    .lista_destaques{ display:grid; gap:14px; margin-top:14px; }
+    .item_destaque{
+      display:grid; grid-template-columns:36px 1fr; gap:12px; align-items:start;
+      padding:12px; border-radius:12px; border:1px solid var(--linha);
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.06));
+    }
+    .bloco_cor{
+      width:36px; height:36px; border-radius:10px; box-shadow: inset 0 0 0 2px rgba(0,0,0,.2);
+    }
+    .cor_azul{ background:linear-gradient(135deg,var(--azul_policial),var(--azul_interface)); }
+    .cor_vermelho{ background:linear-gradient(135deg,#7a0b0b,var(--vermelho_alerta)); }
+    .cor_verde{ background:linear-gradient(135deg,#0a3a14,var(--verde_rural)); }
+
+    /* =================== CONTRIBUIÇÕES =================== */
+    .lista_accordion{ display:grid; gap:10px; margin-top:14px; }
+    details{ border:1px solid var(--linha); border-radius:12px; overflow:hidden; background:var(--fundo_cartao); }
+    summary{
+      list-style:none; cursor:pointer; padding:14px 16px; font-weight:700;
+      display:flex; align-items:center; justify-content:space-between;
+      background:linear-gradient(180deg, rgba(14,165,233,.06), rgba(0,0,0,.05));
+    }
+    summary::-webkit-details-marker{ display:none; }
+    details[open] summary{ border-bottom:1px solid var(--linha); }
+    .conteudo_accordion{ padding:14px 16px; }
+
+    .rotulo{ display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; margin-right:8px; margin-top:6px }
+    .rotulo_azul{ background:rgba(14,165,233,.1); border:1px solid rgba(14,165,233,.35); }
+    .rotulo_verde{ background:rgba(22,163,74,.1); border:1px solid rgba(22,163,74,.35); }
+    .rotulo_vermelho{ background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.35); }
+
+    /* =================== IMAGEM DE FUNDO NO CARD (HOVER) =================== */
+    /*
+      A imagem é um elemento interno (.fundo_imagem) posicionado em absoluto
+      atrás do conteúdo. Ela fica invisível (opacity 0) e aparece (0.3) no hover
+      do card. Para usar, insira dentro do .cartao:
+      <span class="fundo_imagem" style="background-image:url('arquivo.jpg')"></span>
+    */
+  .fundo_imagem{ position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity .25s ease; z-index:0; }
+  .cartao:hover .fundo_imagem{ opacity:.30; }
+  /* garante que o conteúdo do card fique acima da imagem */
+
+  .cartao > *{ position:relative; z-index:1; }
+
+  /* =================== OVERLAY DE IMAGEM (novo, por cartão) =================== */
+  .overlayImagem{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .3s ease; z-index:1; pointer-events:none; }
+  .cartao:hover .overlayImagem{ opacity:.3; }
+  .conteudoCard{ position:relative; z-index:2; }
+
+    /* =================== RODAPÉ =================== */
+    .rodape{ text-align:center; color:var(--texto_suave); font-size:14px; padding:28px 0 48px; }
+    .rodape{ text-align:center; color:var(--texto_suave); font-size:14px; padding:28px 0 48px; }
+  </style>
+</head>
+
+<body>
+  <!-- =================== CABEÇALHO =================== -->
+  <header class="cabecalho">
+    <div class="largura_maxima">
+      <h1 class="titulo_principal">Sistema de Alerta Rural</h1>
+      <p class="subtitulo_principal">Case técnico — Back-end, APIs e geolocalização para operação de monitoramento com acionamento por botão de pânico.</p>
+
+      <div class="area_acoes">
+        <!-- Botão que rola até a seção de contribuições -->
+        <a class="botao botao_principal" href="#secao_contribuicoes">Ver contribuições</a>
+        <!-- Botão para alternar tema (claro/escuro) -->
+        <button class="botao" id="botao_tema" type="button">Alternar tema</button>
+        <!-- Selo com a stack usada (informativo) -->
+        <span class="selo_pilha">Stack: Node.js • Express • MySQL • Postman • Heroku • E-mail</span>
+      </div>
+    </div>
+    <!-- Faixas coloridas na base -->
+    <div class="faixas_base">
+      <div class="faixa_azul"></div>
+      <div class="faixa_vermelha"></div>
+      <div class="faixa_verde"></div>
+    </div>
+  </header>
+
+  <!-- =================== CONTEÚDO PRINCIPAL =================== -->
+  <main class="largura_maxima">
+
+    <!-- ======= Seção: Contexto ======= -->
+    <section class="secao grade_duas_colunas" id="secao_contexto">
+      <article class="cartao">
+        <img class="overlayImagem" src="contexto.jpg" alt="Imagem de contexto" />
+        <div class="conteudoCard">
+        <h2>Contexto</h2>
+        <p>
+          Projeto voltado a patrulhamento em áreas rurais, conectando propriedades a unidades de campo por meio de um painel web
+          e APIs com geolocalização e priorização por proximidade. Fluxo principal: alerta ➜ roteamento por distância ➜ notificação.
+        </p>
+
+        <div class="lista_destaques">
+          <div class="item_destaque">
+            <!-- bloco de cor decorativo (sem símbolo) -->
+            <div class="bloco_cor cor_vermelho"></div>
+            <div>
+              <strong>Alerta imediato:</strong> botão de pânico para registrar evento e iniciar notificação às unidades compatíveis.
+              <div class="texto_suave">Acionamento simples, latência baixa e confirmação de recebimento.</div>
+            </div>
+          </div>
+
+          <div class="item_destaque">
+            <div class="bloco_cor cor_azul"></div>
+            <div>
+              <strong>Geolocalização:</strong> cálculo de proximidade e despacho orientado por distância/tempo.
+              <div class="texto_suave">Considera localização corrente e status de disponibilidade.</div>
+            </div>
+          </div>
+
+          <div class="item_destaque">
+            <div class="bloco_cor cor_verde"></div>
+            <div>
+              <strong>Cenário rural:</strong> cadastros de áreas/propriedades e histórico de ocorrências.
+              <div class="texto_suave">Foco em rastreabilidade e resposta rápida.</div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </article>
+
+      <aside class="cartao" id="cartao_tecnologias">
+        <img class="overlayImagem" src="tecnologias.jpg" alt="Tecnologias" />
+        <div class="conteudoCard">
+        <h2>Tecnologias</h2>
+
+        <!-- SLOT DE IMAGEM DO CARD TECNOLOGIAS
+             Obs: coloque um arquivo "tecnologias.jpg" na mesma pasta do HTML, pra se for trocar a img. A imagem preenche o espaço com opacidade 30%. -->
+        <ul>
+          <li><strong>Back-end:</strong> Node.js (migração após tentativa inicial em Python/Pandas)</li>
+          <li><strong>Framework:</strong> Express</li>
+          <li><strong>Banco:</strong> MySQL</li>
+          <li><strong>Integração:</strong> Endpoints HTTP para o front-end (rotas/serviços)</li>
+          <li><strong>Documentação/Testes:</strong> Postman</li>
+          <li><strong>E-mail:</strong> Disparo transacional (ex.: Nodemailer/SMTP)</li>
+          <li><strong>Hospedagem:</strong> Heroku</li>
+          <li><strong>Python \(fase inicial\):</strong> Pandas para manipulação de dados (onde aplicável)</li>
+        </ul>
+        <div class="divisor"></div>
+        <p class="texto_suave">Motivação da stack: alinhamento com o front-end em JavaScript e facilidade de integração.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ======= Seção: Contribuições Pessoais ======= -->
+    <section class="secao grade_duas_colunas" id="secao_contribuicoes">
+      <article class="cartao">
+        <img class="overlayImagem" src="contribuicoes.jpg" alt="Contribuições" />
+        <div class="conteudoCard">
+        <h2>Contribuições Pessoais</h2>
+        <div class="lista_accordion">
+          <details open>
+            <summary>Desenvolvimento de CRUDs e Endpoints</summary>
+            <div class="conteudo_accordion">
+              <p>Criação de rotas para usuários, unidades de campo, regiões e eventos; padronização de respostas e códigos de status.</p>
+              <span class="rotulo rotulo_azul">REST</span>
+              <span class="rotulo rotulo_azul">Express</span>
+            </div>
+          </details>
+          <details>
+            <summary>Integrações e Geolocalização</summary>
+            <div class="conteudo_accordion">
+              <p>Integração com serviços de localização para cálculo de proximidade e ordenação por distância/tempo estimado.</p>
+              <span class="rotulo rotulo_azul">APIs</span>
+              <span class="rotulo rotulo_verde">Geo</span>
+            </div>
+          </details>
+          <details>
+            <summary>Documentação e Testes (Postman)</summary>
+            <div class="conteudo_accordion">
+              <p>Collections com exemplos, variáveis de ambiente e cenários de teste para equipes internas consumirem os endpoints com consistência.</p>
+              <span class="rotulo rotulo_azul">Postman</span>
+            </div>
+          </details>
+          <details>
+            <summary>Decisão de Arquitetura (Isolamento de Ambientes)</summary>
+            <div class="conteudo_accordion">
+              <p>
+                Proposta e apoio na implementação de <strong>dois ambientes lógicos distintos</strong> com permissões e visões independentes,
+                reduzindo acoplamento entre dados operacionais e administrativos e fortalecendo confidencialidade.
+              </p>
+              <span class="rotulo rotulo_vermelho">Segurança</span>
+              <span class="rotulo rotulo_verde">Domínios de dados</span>
+            </div>
+          </details>
+          <details>
+            <summary>Colaboração e Evolução de Stack</summary>
+            <div class="conteudo_accordion">
+              <p>Atuação junto ao dev principal para migração de Python → Node.js, definição de fluxos de autenticação e convenções de rotas.</p>
+              <span class="rotulo rotulo_azul">Autenticação</span>
+              <span class="rotulo rotulo_azul">Node.js</span>
+            </div>
+          </details>
+        </div>
+        </div>
+      </article>
+
+      <aside class="cartao">
+        <img class="overlayImagem" src="resultados.jpg" alt="Resultados" />
+        <div class="conteudoCard">
+        <h2>Resultados</h2>
+        <p>
+          Aplicação utilizada em operações reais de monitoramento rural, viabilizando acionamentos rápidos e comunicação eficiente
+          entre propriedades e unidades de campo. Experiência sólida em APIs, modelagem de dados e integração multi-equipe.
+        </p>
+        <div class="divisor"></div>
+        <h2>Observação</h2>
+        <p class="texto_suave">
+          Devido à confidencialidade institucional, entidades específicas e código-fonte original não são públicos.
+          Este case descreve funções e responsabilidades exercidas no projeto.
+        </p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- =================== RODAPÉ =================== -->
+  <footer class="rodape">
+    © 2025 — Desenvolvido por <strong>Mestre Lee</strong>. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    // Alternador de tema claro/escuro
+
+    const botaoTema = document.getElementById('botao_tema');
+
+    // Caso o usuário já tenha salvo preferência de tema
+    const temaSalvo = localStorage.getItem('case-tema');
+    if(temaSalvo){
+      document.body.setAttribute('data-tema', temaSalvo);
+    }
+
+    // Alterna o tema quando o usuário clica no botão
+    botaoTema.addEventListener('click', function(){
+      const temaAtual = document.body.getAttribute('data-tema') === 'claro' ? 'escuro' : 'claro';
+      if(temaAtual === 'escuro'){
+        document.body.removeAttribute('data-tema');
+        localStorage.setItem('case-tema','escuro');
+      } else {
+        document.body.setAttribute('data-tema','claro');
+        localStorage.setItem('case-tema','claro');
+      }
+    });
+
+    // Realça a borda brevemente 
+    document.querySelectorAll('details').forEach(function(item){
+      item.addEventListener('toggle', function(){
+        if(item.open){
+          item.style.borderColor = 'rgba(14,165,233,.55)';
+          setTimeout(function(){ item.style.borderColor = 'var(--linha)'; }, 380);
+        }
+      });
+    });
+
+
+  </script>
+</body>
+</html>
